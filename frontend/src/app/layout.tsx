@@ -18,6 +18,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={inter.className}>
         <Providers>
+          <script src="https://cdn.tailwindcss.com"></script>
           {children}
         </Providers>
       </body>
