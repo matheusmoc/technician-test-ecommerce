@@ -17,10 +17,7 @@ const PRODUCTS_QUERY = gql`
       imageUrl
       stock
       isActive
-      seller {
-        name
-        storeName
-      }
+      sellerId 
       createdAt
     }
   }

@@ -41,8 +41,6 @@ interface SellerStatsData {
   };
 }
 
-// Removed redundant destructuring of useQuery
-
 export default function DashboardPage() {
   const { user } = useAuth();
   const router = useRouter();
@@ -107,7 +105,7 @@ export default function DashboardPage() {
         </Link>
         
         <Link
-          href="/store-orders"
+          href="/orders"
           className="card hover:shadow-lg transition-shadow cursor-pointer block"
         >
           <h3 className="text-xl font-semibold mb-2">Ver Pedidos</h3>

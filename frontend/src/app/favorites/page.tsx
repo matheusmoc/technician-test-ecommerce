@@ -15,10 +15,8 @@ const FAVORITES_QUERY = gql`
       description
       imageUrl
       stock
-      seller {
-        name
-        storeName
-      }
+      isActive
+      createdAt
     }
   }
 `;

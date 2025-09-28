@@ -27,8 +27,9 @@ const CART_QUERY = gql`
   }
 `;
 
+
 const UPDATE_CART_MUTATION = gql`
-  mutation UpdateCartItem($productId: String!, $quantity: Int!) {
+  mutation UpdateCartItem($productId: String!, $quantity: Float!) {
     updateCartItem(productId: $productId, quantity: $quantity) {
       id
       items {
@@ -93,9 +94,6 @@ interface CartData {
   };
 }
 
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
-
 export default function CartPage() {
   const { user } = useAuth();
   
@@ -112,7 +110,7 @@ export default function CartPage() {
   const [checkout, { loading: checkoutLoading }] = useMutation(CHECKOUT_MUTATION, {
     onCompleted: () => {
       alert('Pedido criado com sucesso!');
-      window.location.href = `/orders`;
+      window.location.href = `/store-orders`;
     },
     onError: (error) => {
       alert('Erro ao finalizar pedido: ' + error.message);
@@ -135,8 +133,8 @@ export default function CartPage() {
     checkout();
   };
 
-  if (loading) return <div className="text-center">Carregando carrinho...</div>;
-  if (error) return <div className="text-center text-red-500">Erro: {error.message}</div>;
+  if (loading) return <div className="container mx-auto p-6 text-center">Carregando carrinho...</div>;
+  if (error) return <div className="container mx-auto p-6 text-center text-red-500">Erro: {error.message}</div>;
 
   const cart = data?.cart;
   const items = cart?.items || [];
@@ -147,7 +145,7 @@ export default function CartPage() {
 
   if (user?.role !== 'CLIENT') {
     return (
-      <div className="text-center">
+      <div className="container mx-auto p-6 text-center">
         <h1 className="text-2xl font-bold mb-4">Carrinho</h1>
         <p className="text-gray-600">Apenas clientes podem acessar o carrinho.</p>
       </div>
@@ -155,7 +153,7 @@ export default function CartPage() {
   }
 
   return (
-    <div>
+    <div className="container mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">Carrinho de Compras</h1>
 
       {items.length === 0 ? (
@@ -187,34 +185,37 @@ export default function CartPage() {
                       <p className="text-primary-600 font-semibold">
                         R$ {item.product.price.toFixed(2)}
                       </p>
+                      <p className="text-sm text-gray-500">
+                        Estoque: {item.product.stock}
+                      </p>
                     </div>
                     
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => handleUpdateQuantity(item.productId, item.quantity - 1)}
-                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center"
+                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100"
                       >
                         -
                       </button>
                       
-                      <span className="w-8 text-center">{item.quantity}</span>
+                      <span className="w-8 text-center font-medium">{item.quantity}</span>
                       
                       <button
                         onClick={() => handleUpdateQuantity(item.productId, item.quantity + 1)}
                         disabled={item.quantity >= item.product.stock}
-                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center disabled:opacity-50"
+                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         +
                       </button>
                     </div>
                     
                     <div className="text-right">
-                      <p className="font-semibold">
+                      <p className="font-semibold text-lg">
                         R$ {(item.product.price * item.quantity).toFixed(2)}
                       </p>
                       <button
                         onClick={() => handleRemoveItem(item.productId)}
-                        className="text-red-500 text-sm hover:text-red-700"
+                        className="text-red-500 text-sm hover:text-red-700 mt-1"
                       >
                         Remover
                       </button>
@@ -239,17 +240,22 @@ export default function CartPage() {
               </div>
               <div className="flex justify-between text-lg font-bold border-t pt-2">
                 <span>Total:</span>
-                <span>R$ {total.toFixed(2)}</span>
+                <span className="text-primary-600">R$ {total.toFixed(2)}</span>
               </div>
             </div>
             
             <button
               onClick={handleCheckout}
-              disabled={checkoutLoading}
+              disabled={checkoutLoading || items.length === 0}
               className="w-full btn btn-primary disabled:opacity-50"
             >
               {checkoutLoading ? 'Processando...' : 'Finalizar Compra'}
             </button>
+
+            <div className="mt-4 text-sm text-gray-500">
+              <p>• Frete grátis para todo o Brasil</p>
+              <p>• Entrega em até 7 dias úteis</p>
+            </div>
           </div>
         </div>
       )}

@@ -39,7 +39,7 @@ export class ProductService {
 
     return this.productRepository.find({
       where,
-      relations: ['seller'],
+      relations: ['seller'], 
       skip: (page - 1) * limit,
       take: limit,
       order: { createdAt: 'DESC' },
@@ -49,12 +49,16 @@ export class ProductService {
   async findBySeller(sellerId: string): Promise<Product[]> {
     return this.productRepository.find({
       where: { sellerId },
+      relations: ['seller'],
       order: { createdAt: 'DESC' },
     });
   }
 
   async updateProduct(id: string, input: CreateProductInput, sellerId: string): Promise<Product> {
-    const product = await this.productRepository.findOne({ where: { id } });
+    const product = await this.productRepository.findOne({ 
+      where: { id },
+      relations: ['seller'] 
+    });
     
     if (!product) {
       throw new NotFoundException('Product not found');
@@ -65,7 +69,12 @@ export class ProductService {
     }
 
     await this.productRepository.update(id, input);
-    const updatedProduct = await this.productRepository.findOne({ where: { id } });
+    
+    const updatedProduct = await this.productRepository.findOne({ 
+      where: { id },
+      relations: ['seller'] 
+    });
+    
     if (!updatedProduct) {
       throw new NotFoundException('Updated product not found');
     }
@@ -73,7 +82,10 @@ export class ProductService {
   }
 
   async deleteProduct(id: string, sellerId: string): Promise<boolean> {
-    const product = await this.productRepository.findOne({ where: { id } });
+    const product = await this.productRepository.findOne({ 
+      where: { id },
+      relations: ['seller'] 
+    });
     
     if (!product) {
       throw new NotFoundException('Product not found');
@@ -87,11 +99,11 @@ export class ProductService {
     return true;
   }
 
-  // Dashboard statistics for sellers
+ 
   async getSellerStats(sellerId: string) {
     const products = await this.productRepository.find({
       where: { sellerId },
-      relations: ['orderItems'],
+      relations: ['seller', 'orderItems'], 
     });
 
     const totalProducts = products.length;
@@ -103,7 +115,7 @@ export class ProductService {
       return sum + product.orderItems.reduce((itemSum, item) => itemSum + (item.quantity * item.price), 0);
     }, 0);
 
-    // Find best selling product
+ 
     const bestSeller = products.reduce<{ product: Product; sales: number } | null>((best, product) => {
       const productSales = product.orderItems.reduce((sum, item) => sum + item.quantity, 0);
       return !best || productSales > best.sales ? { product, sales: productSales } : best;

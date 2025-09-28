@@ -41,6 +41,7 @@ export class Product {
   publishedDate: Date;
 
   @ManyToOne(() => User, user => user.products)
+  @Field(() => User) 
   seller: User;
 
   @Column()

@@ -70,7 +70,7 @@ export default function MyProductsPage() {
     stock: ''
   });
 
-  interface MyProductsQueryResult {
+  interface MyProductsData {
     myProducts: {
       id: string;
       name: string;
@@ -83,7 +83,7 @@ export default function MyProductsPage() {
     }[];
   }
   
-  const { data, loading, error, refetch } = useQuery<MyProductsQueryResult>(MY_PRODUCTS_QUERY);
+  const { data, loading, error, refetch } = useQuery<MyProductsData>(MY_PRODUCTS_QUERY);
 
   const [createProduct] = useMutation(CREATE_PRODUCT_MUTATION, {
     onCompleted: () => {
