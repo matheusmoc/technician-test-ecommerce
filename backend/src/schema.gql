@@ -1,0 +1,190 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Cart {
+  id: ID!
+  items: [CartItem!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type CartItem {
+  id: ID!
+  product: Product!
+  productId: String!
+  quantity: Float!
+}
+
+type Payment {
+  id: ID!
+  orderId: String!
+  paymentMethod: PaymentMethod!
+  status: PaymentStatus!
+  amount: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  PIX
+  DEBIT_CARD
+  BANK_SLIP
+  PAYPAL
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+type Order {
+  id: ID!
+  userId: String!
+  total: Float!
+  status: OrderStatus!
+  items: [OrderItem!]!
+  payment: Payment
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+type OrderItem {
+  id: String!
+  product: Product!
+  productId: String!
+  quantity: Float!
+  price: Float!
+  name: String!
+}
+
+type Product {
+  id: ID!
+  name: String!
+  price: Float!
+  description: String!
+  imageUrl: String!
+  stock: Float!
+  isActive: Boolean!
+  publishedDate: DateTime!
+  sellerId: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type User {
+  id: ID!
+  email: String!
+  name: String!
+  role: UserRole!
+  storeName: String
+  isActive: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum UserRole {
+  CLIENT
+  SELLER
+}
+
+type AuthResponse {
+  token: String!
+  user: User!
+}
+
+type PaymentResponse {
+  success: Boolean!
+  message: String!
+  order: Order
+}
+
+type BestSeller {
+  product: Product!
+  sales: Float!
+}
+
+type SellerStats {
+  totalProducts: Float!
+  totalSold: Float!
+  revenue: Float!
+  bestSeller: BestSeller
+}
+
+type Query {
+  me: User!
+  products(filter: ProductsFilterInput): [Product!]!
+  myProducts: [Product!]!
+  myOrders: [Order!]!
+  myStoreOrders: [Order!]!
+  cart: Cart!
+  favorites: [Product!]!
+  sellerStats: SellerStats!
+}
+
+input ProductsFilterInput {
+  search: String
+  minPrice: Float
+  maxPrice: Float
+  sellerId: String
+  page: Float! = 1
+  limit: Float! = 10
+}
+
+type Mutation {
+  register(input: RegisterInput!): AuthResponse!
+  login(input: LoginInput!): AuthResponse!
+  deleteMyAccount: Boolean!
+  createProduct(input: CreateProductInput!): Product!
+  updateProduct(id: String!, input: CreateProductInput!): Product!
+  deleteProduct(id: String!): Boolean!
+  checkout: Order!
+  processPayment(input: ProcessPaymentInput!): PaymentResponse!
+  addToCart(productId: String!): Cart!
+  removeFromCart(productId: String!): Cart!
+  updateCartItem(productId: String!, quantity: Float!): Cart!
+  clearCart: Boolean!
+  toggleFavorite(productId: String!): Boolean!
+}
+
+input RegisterInput {
+  email: String!
+  password: String!
+  name: String!
+  role: UserRole!
+  storeName: String
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input CreateProductInput {
+  name: String!
+  price: Float!
+  description: String!
+  imageUrl: String!
+  stock: Float!
+}
+
+input ProcessPaymentInput {
+  orderId: String!
+  paymentMethod: PaymentMethod!
+}

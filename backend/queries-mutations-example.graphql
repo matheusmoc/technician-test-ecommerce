@@ -1,0 +1,197 @@
+
+mutation RegisterClient {
+  register(
+    input: {
+      email: "cliente@exemplo.com"
+      password: "senha123"
+      name: "João Cliente"
+      role: CLIENT
+    }
+  ) {
+    token
+    user {
+      id
+      email
+      name
+      role
+      isActive
+      createdAt
+    }
+  }
+}
+
+mutation RegisterSeller {
+  register(
+    input: {
+      email: "vendedor@exemplo.com"
+      password: "senha123"
+      name: "Maria Vendedora"
+      role: SELLER
+      storeName: "Loja da Maria"
+    }
+  ) {
+    token
+    user {
+      id
+      email
+      name
+      role
+      storeName
+      isActive
+      createdAt
+    }
+  }
+}
+
+
+mutation LoginClient {
+  login(input: { email: "cliente@exemplo.com", password: "senha123" }) {
+    token
+    user {
+      id
+      email
+      name
+      role
+      isActive
+    }
+  }
+}
+
+query Me {
+  me {
+    id
+    email
+    name
+    role
+    storeName
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+
+
+mutation CreateProduct {
+  createProduct(
+    input: {
+      name: "Produto Teste2"
+      price: 99.95
+      description: "Descrição do produto 2"
+      imageUrl: "http://exemplo.com/image.jpg"
+      stock: 10
+    }
+  ) {
+    id
+    name
+    price
+  }
+}
+
+query ProductAll {
+  products {
+    id
+    name
+    price
+    description
+    imageUrl
+    publishedDate
+    isActive
+    stock
+    sellerId  
+    createdAt
+    updatedAt
+  }
+}
+
+mutation AddToFavorites {
+  toggleFavorite(productId:  "1f562f66-e076-49dd-b460-7ad1c47bb546")
+}
+  
+query MyFavorites {
+  favorites {
+    id
+    name
+    price
+    description
+    imageUrl
+    sellerId
+    }
+  }
+  
+  
+  mutation addToCart {
+  addToCart(productId: "1f562f66-e076-49dd-b460-7ad1c47bb546") {
+    id
+    createdAt
+    updatedAt
+    items {      
+      productId
+      quantity
+    }
+  }
+}
+
+query cart {
+  cart {
+    items {        
+      productId
+      quantity
+    }
+  }
+}
+
+mutation Checkout {
+  checkout {
+    id
+    userId
+    total
+    status
+    items { 
+      productId
+      quantity
+      price
+      name
+    }
+    createdAt
+    updatedAt
+  }
+}
+
+query CheckOrders {
+  myOrders {
+    id
+    total
+    status
+    createdAt
+    updatedAt
+    items {
+      productId
+      quantity
+      price
+      name
+    }
+    payment {
+      id
+      paymentMethod
+      status
+      amount
+    }
+  }
+}
+
+mutation PayOrder {
+  processPayment(
+    input: {
+      orderId: "9e9a7ef9-0d56-4802-b9d7-d4c68c4ab509"
+      paymentMethod: PIX
+    }
+  ) {
+    success
+    message
+    order {
+      id
+      status
+      updatedAt
+    }
+  }
+}
