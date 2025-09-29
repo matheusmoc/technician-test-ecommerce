@@ -9,15 +9,6 @@
   - [Módulo do Vendedor](#-módulo-do-vendedor)
   - [Gerenciamento de Conta](#-gerenciamento-de-conta)
 - [Instalação e Configuração](#-instalação-e-configuração)
-- [Scripts](#-scripts)
-- [Deploy](#-deploy)
-- [Design System](#-design-system)
-- [Fluxos Principais](#-fluxos-principais)
-- [Segurança](#-segurança)
-- [Troubleshooting](#-troubleshooting)
-- [Próximas Funcionalidades](#-próximas-funcionalidades)
-- [Contribuição](#-contribuição)
-- [Licença](#-licença)
 ---
 
 ## 🎯 Visão Geral
