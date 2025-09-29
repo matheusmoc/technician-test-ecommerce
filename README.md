@@ -72,9 +72,87 @@ Principais características:
 <img width="1457" height="830" alt="Captura de tela 2025-09-28 135038" src="https://github.com/user-attachments/assets/5f7bcf65-778e-4e62-ac30-a1d9cb6ff6a8" />
 <img width="1327" height="624" alt="Captura de tela 2025-09-28 135104" src="https://github.com/user-attachments/assets/2ef9b1dd-7556-4c4b-a279-f65b1e524a9a" />
 
+---
 
+# 🚀 Iniciar Projeto para Deploy em Produção
 
+📂 Arquivos de Ambiente
 
+Backend - /backend/.env.docker
+
+    # Database
+    DATABASE_URL="file:./data/database.sqlite"
+
+    # JWT
+    JWT_SECRET="your-super-secret-jwt-key-change-in-production"
+
+    # Server
+    PORT=3001
+    NODE_ENV=production
+
+    # CORS
+    CORS_ORIGIN=http://localhost:3000
+
+Frontend - /frontend/.env.production
+
+    NEXT_PUBLIC_GRAPHQL_ENDPOINT=http://localhost:3001/graphql
+    NEXT_PUBLIC_APP_URL=http://localhost:3000
+
+------------------------------------------------------------------------
+
+🐳 Comandos Docker
+
+1️⃣ Desenvolvimento Local
+
+-   Build e start dos containers
+
+    docker-compose up --build
+
+-   Executar em background
+
+    docker-compose up -d
+
+-   Ver logs
+
+    docker-compose logs -f
+
+-   Parar containers
+
+    docker-compose down
+
+------------------------------------------------------------------------
+
+2️⃣ Comandos Úteis
+
+-   Executar comandos dentro do container
+
+    docker-compose exec backend npx prisma migrate dev
+    docker-compose exec frontend npm run build
+
+-   Ver status dos containers
+
+    docker-compose ps
+
+-   Reiniciar serviços específicos
+
+    docker-compose restart backend
+    docker-compose restart frontend
+
+-   Remover tudo (containers, volumes, networks)
+
+    docker-compose down -v
+
+------------------------------------------------------------------------
+
+3️⃣ Produção
+
+-   Build para produção
+
+    docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
+
+-   Com variáveis de ambiente customizadas
+
+    docker-compose --env-file .env.production up -d
 
 
 
