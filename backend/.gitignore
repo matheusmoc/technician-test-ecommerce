@@ -86,3 +86,5 @@ out/
 .svelte-kit/
 .vite/
 *.tsbuildinfo
+.env.docker
+
