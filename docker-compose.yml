@@ -8,7 +8,6 @@ services:
     environment:
       - NODE_ENV=production
       - DATABASE_URL=file:/app/data/database.sqlite
-      - JWT_SECRET=your-production-jwt-secret-key-here
       - PORT=3001
       - CORS_ORIGIN=http://localhost:3000
     volumes:
