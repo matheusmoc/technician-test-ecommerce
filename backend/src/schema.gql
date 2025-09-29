@@ -83,6 +83,7 @@ type Product {
   stock: Float!
   isActive: Boolean!
   publishedDate: DateTime!
+  seller: User!
   sellerId: String!
   createdAt: DateTime!
   updatedAt: DateTime!
