@@ -110,7 +110,7 @@ export default function CartPage() {
   const [checkout, { loading: checkoutLoading }] = useMutation(CHECKOUT_MUTATION, {
     onCompleted: () => {
       alert('Pedido criado com sucesso!');
-      window.location.href = `/store-orders`;
+      window.location.href = `/orders`;
     },
     onError: (error) => {
       alert('Erro ao finalizar pedido: ' + error.message);
