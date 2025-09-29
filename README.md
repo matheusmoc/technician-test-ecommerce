@@ -126,7 +126,7 @@ Frontend - /frontend/.env.production
 
 -   Executar comandos dentro do container
 
-    docker-compose exec backend npx prisma migrate dev
+    docker-compose exec backend npm run typeorm migration:run
     docker-compose exec frontend npm run build
 
 -   Ver status dos containers
