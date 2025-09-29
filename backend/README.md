@@ -1,98 +1,503 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🚀 E-commerce - Backend GraphQL Documentation
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 📋 Quick Start
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
-
+### 1. Start Backend
 ```bash
-$ npm install
+cd backend
+npm install
+npm run start:dev
 ```
 
-## Compile and run the project
 
-```bash
-# development
-$ npm run start
 
-# watch mode
-$ npm run start:dev
+# 🛍️ Documentação GraphQL - E-commerce
 
-# production mode
-$ npm run start:prod
+Este documento reúne todas as **queries** e **mutations** do sistema, com exemplos prontos para uso no **GraphQL Playground**.
+
+---
+
+## 🔐 AUTENTICAÇÃO
+
+### 📝 Registrar Usuário
+```graphql
+mutation Register {
+  register(input: {
+    email: "user@example.com",
+    password: "password123",
+    name: "User Name",
+    role: CLIENT, # ou SELLER
+    storeName: "Minha Loja" # obrigatório para SELLER
+  }) {
+    token
+    user {
+      id
+      email
+      name
+      role
+      storeName
+      isActive
+      createdAt
+    }
+  }
+}
 ```
 
-## Run tests
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+🔐 Login
+```graphql
+mutation Login {
+  login(input: {
+    email: "user@example.com",
+    password: "password123"
+  }) {
+    token
+    user {
+      id
+      email
+      name
+      role
+      storeName
+      isActive
+      createdAt
+    }
+  }
+}
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+🗑️ Excluir Conta (Cliente)
+```graphql
+mutation DeleteMyAccount {
+  deleteMyAccount
+}
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+🛍️ PRODUTOS
+📋 Listar Produtos
+```graphql
+query Products {
+  products(filter: {
+    search: "nome do produto",
+    minPrice: 10.0,
+    maxPrice: 100.0,
+    page: 1,
+    limit: 10
+  }) {
+    id
+    name
+    price
+    description
+    imageUrl
+    stock
+    isActive
+    seller {
+      id
+      name
+      storeName
+    }
+    createdAt
+  }
+}
+```
+```graphql
+🏪 Meus Produtos (Vendedor)
+query MyProducts {
+  myProducts {
+    id
+    name
+    price
+    description
+    imageUrl
+    stock
+    isActive
+    createdAt
+  }
+}
+```
 
-## Resources
+➕ Criar Produto (Vendedor)
+```graphql
+mutation CreateProduct {
+  createProduct(input: {
+    name: "Nome do Produto",
+    price: 99.99,
+    description: "Descrição do produto",
+    imageUrl: "https://example.com/image.jpg",
+    stock: 10
+  }) {
+    id
+    name
+    price
+    description
+    imageUrl
+    stock
+    isActive
+    createdAt
+  }
+}
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+✏️ Atualizar Produto
+```graphql
+mutation UpdateProduct {
+  updateProduct(
+    id: "product-id",
+    input: {
+      name: "Nome Atualizado",
+      price: 89.99,
+      description: "Descrição atualizada",
+      imageUrl: "https://example.com/new-image.jpg",
+      stock: 5
+    }
+  ) {
+    id
+    name
+    price
+    description
+    imageUrl
+    stock
+    isActive
+  }
+}
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+🗑️ Deletar Produto
+```graphql
+mutation DeleteProduct {
+  deleteProduct(id: "product-id")
+}
+```
 
-## Support
+🛒 CARRINHO
+🛍️ Ver Carrinho
+```graphql
+query Cart {
+  cart {
+    id
+    items {
+      id
+      productId
+      quantity
+      product {
+        id
+        name
+        price
+        imageUrl
+        stock
+      }
+    }
+    createdAt
+    updatedAt
+  }
+}
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+➕ Adicionar ao Carrinho
+```graphql
+mutation AddToCart {
+  addToCart(productId: "product-id") {
+    id
+    items {
+      productId
+      quantity
+      product {
+        name
+        price
+      }
+    }
+  }
+}
+```
 
-## Stay in touch
+🔢 Atualizar Quantidade
+```graphql
+mutation UpdateCartItem {
+  updateCartItem(productId: "product-id", quantity: 2) {
+    id
+    items {
+      productId
+      quantity
+      product {
+        name
+        price
+      }
+    }
+  }
+}
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+🗑️ Remover do Carrinho
+```graphql
+mutation RemoveFromCart {
+  removeFromCart(productId: "product-id") {
+    id
+    items {
+      productId
+      quantity
+    }
+  }
+}
+```
 
-## License
+🧹 Limpar Carrinho
+```graphql
+mutation ClearCart {
+  clearCart
+}
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+📦 PEDIDOS & PAGAMENTOS
+🛍️ Finalizar Compra (Checkout)
+```graphql
+mutation Checkout {
+  checkout {
+    id
+    total
+    status
+    items {
+      productId
+      quantity
+      price
+      name
+    }
+    createdAt
+  }
+}
+```
+
+💳 Processar Pagamento
+```graphql
+mutation ProcessPayment {
+  processPayment(input: {
+    orderId: "order-id",
+    paymentMethod: PIX # CREDIT_CARD, DEBIT_CARD, BANK_SLIP, PAYPAL
+  }) {
+    success
+    message
+    order {
+      id
+      status
+      updatedAt
+    }
+  }
+}
+```
+
+📋 Meus Pedidos (Cliente)
+```graphql
+query MyOrders {
+  myOrders {
+    id
+    total
+    status
+    createdAt
+    items {
+      name
+      quantity
+      price
+    }
+    payment {
+      paymentMethod
+      status
+      amount
+    }
+  }
+}
+```
+
+🏪 Pedidos da Minha Loja (Vendedor)
+```graphql
+query StoreOrders {
+  myStoreOrders {
+    id
+    total
+    status
+    createdAt
+    items {
+      name
+      quantity
+      price
+    }
+    payment {
+      paymentMethod
+      status
+    }
+  }
+}
+```
+
+❤️ FAVORITOS
+📋 Meus Favoritos
+```graphql
+query Favorites {
+  favorites {
+    id
+    name
+    price
+    description
+    imageUrl
+    stock
+    seller {
+      name
+      storeName
+    }
+  }
+}
+```
+
+🔄 Alternar Favorito
+```graphql
+mutation ToggleFavorite {
+  toggleFavorite(productId: "product-id")
+}
+```
+
+📊 DASHBOARD (Vendedor)
+📈 Estatísticas do Vendedor
+```graphql
+query SellerStats {
+  sellerStats {
+    totalProducts
+    totalSold
+    revenue
+    bestSeller {
+      product {
+        id
+        name
+        price
+      }
+      sales
+    }
+  }
+}
+```
+
+👤 PERFIL DO USUÁRIO
+👤 Meu Perfil
+```graphql
+query Me {
+  me {
+    id
+    email
+    name
+    role
+    storeName
+    isActive
+    createdAt
+    updatedAt
+  }
+}
+```
+
+🎯 EXEMPLOS DE USO
+Fluxo Completo de Compra
+# 1. Adicionar produtos ao carrinho
+```graphql
+mutation AddProducts {
+  addToCart(productId: "product-1") { ... }
+  addToCart(productId: "product-2") { ... }
+}
+```
+# 2. Verificar carrinho
+```graphql
+query CheckCart {
+  cart {
+    items {
+      productId
+      quantity
+      product {
+        name
+        price
+      }
+    }
+  }
+}
+```
+
+# 3. Finalizar compra
+```graphql
+mutation CheckoutOrder {
+  checkout {
+    id
+    total
+    items { ... }
+  }
+}
+```
+
+# 4. Processar pagamento
+```graphql
+mutation PayOrder {
+  processPayment(input: {
+    orderId: "order-id",
+    paymentMethod: PIX
+  }) { ... }
+}
+```
+
+# 5. Ver status do pedido
+```graphql
+query OrderStatus {
+  myOrders {
+    id
+    status
+    payment { ... }
+  }
+}
+```
+
+Fluxo do Vendedor
+# 1. Criar produto
+```graphql
+mutation CreateProducts {
+  createProduct(input: { ... }) { ... }
+}
+```
+
+# 2. Ver dashboard
+```graphql
+query Dashboard {
+  sellerStats {
+    totalProducts
+    revenue
+    bestSeller { ... }
+  }
+}
+```
+
+# 3. Gerenciar pedidos
+```graphql
+query StoreOrders {
+  myStoreOrders {
+    id
+    status
+    total
+    items { ... }
+  }
+}
+```
+
+🔧 TROUBLESHOOTING
+Erros Comuns
+
+401 Unauthorized → Adicione o header de autenticação Authorization: Bearer {token}
+
+404 Not Found → Verifique se o backend está rodando na porta 3001
+
+Erros de campo → Confira se os nomes dos campos nas queries/mutations estão corretos
+
+Headers para Requisições Autenticadas
+{
+  "Authorization": "Bearer seu-jwt-token",
+  "Content-Type": "application/json"
+}
+
+Testes no GraphQL Playground
+
+Acesse: http://localhost:3001/graphql
+
+Para operações autenticadas com JWT, use o header:
+
+{
+  "Authorization": "Bearer seu-token"
+}
