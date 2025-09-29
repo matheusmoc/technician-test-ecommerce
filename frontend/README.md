@@ -3,7 +3,6 @@
 ## 📋 Índice
 - [Visão Geral](#visão-geral)
 - [Tecnologias](#-tecnologias)
-- [Estrutura do Projeto](#-estrutura-do-projeto)
 - [Funcionalidades](#-funcionalidades)
   - [Autenticação & Usuários](#-autenticação--usuários)
   - [Módulo do Cliente](#-módulo-do-cliente)
